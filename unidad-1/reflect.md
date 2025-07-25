@@ -2,7 +2,7 @@
 
 ## 🤔 Fase: Reflect
 
-## Actividad 7  
+### Actividad 7  
 
 *1. Basándote en los ejemplos que vimos de sistemas físicos interactivos al iniciar el curso, describe las tres características que definen a un sistema físico interactivo.*  
 
@@ -90,5 +90,31 @@ function recibirDato() {
     colorActual = color(random(255), random(255), random(255));
   }
 }
-```  
+```
+___________________________________________________________  
+
+### Actividad 8  
+
+__1) ¿Qué fue más desafiante para ti en esta unidad: la parte conceptual (entender qué es un sistema físico interactivo) o la parte técnica (hacer que el micro:bit y p5.js se comunicaran)? ¿Por qué?__    
+R/ Creo que la parte "tecnica de lo conceptual" ya que entendía parte del código, pero no completo, por
+
+__2)Describe el momento “¡Aha!” que tuviste cuando lograste que una acción en el micro:bit (presionar un botón, sacudirlo) tuviera un efecto visible en el canvas de p5.js por primera vez. ¿Qué fue lo que entendiste en ese instante?__    
+R/
+
+__3) Al inicio de la unidad te pregunté: “¿Este curso para qué me sirve?”. Después de experimentar y construir tu primer prototipo, ¿Cómo ha cambiado o se ha vuelto más concreta tu respuesta a esa pregunta?__    
+R/
+
+__4) El tutorial de la Actividad 05 te llevó paso a paso. ¿Cómo te sentiste con ese método de aprendizaje? ¿Te dio seguridad o preferirías haberlo intentado por tu cuenta desde el principio?__    
+R/
+
+
+
+
+
+
+
+
+
+
+
 
