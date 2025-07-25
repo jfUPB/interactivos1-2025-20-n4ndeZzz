@@ -99,15 +99,20 @@ __1) ¿Qué fue más desafiante para ti en esta unidad: la parte conceptual (ent
 R/ Creo que la parte "tecnica de lo conceptual" ya que entendía parte del código, pero no completo, por esto digo que entendía lo principal pero no línea a línea, ya que habían código nuevos que jamas habia usado como el de UART.  
 
 __2)Describe el momento “¡Aha!” que tuviste cuando lograste que una acción en el micro:bit (presionar un botón, sacudirlo) tuviera un efecto visible en el canvas de p5.js por primera vez. ¿Qué fue lo que entendiste en ese instante?__    
-R/Cuando estaba haciendo el ejercicio 06. solamente me funcionaba el movimiento a la izquierda en el microb, pero me di cuenta que tenía un problema en el código de micro:bit, por lo que tuve leer el código detenidamente y cambiar la línea
+R/Cuando estaba haciendo el ejercicio 06. solamente me funcionaba el movimiento a la izquierda en el microb, pero me di cuenta que tenía un problema en el código de micro:bit, por lo que tuve leer el código detenidamente y añadir la línea:  
+```py
+    if button_b.is_pressed():
+```
 
 __3) Al inicio de la unidad te pregunté: “¿Este curso para qué me sirve?”. Después de experimentar y construir tu primer prototipo, ¿Cómo ha cambiado o se ha vuelto más concreta tu respuesta a esa pregunta?__    
-R/
+R/Para mi, directamente para las experiencias interactivas, aunque todas las ramas pueden aprender algo, creo la verdad que es el primer acercamiento a experiencias interactivas.  
+
 
 __4) El tutorial de la Actividad 05 te llevó paso a paso. ¿Cómo te sentiste con ese método de aprendizaje? ¿Te dio seguridad o preferirías haberlo intentado por tu cuenta desde el principio?__    
-R/
+R/Me gustó bastante la verdad, no cambiaría nada, principalmente por el hecho de que lo vimos, luego lo hicimos y al final la siguiente actividad consistea en un ejercicio autónomo del cual nos podíamos basar del anterior.
 
 
+### Actividad 8:  
 
 
 
