@@ -114,12 +114,32 @@ R/Me gustó bastante la verdad, no cambiaría nada, principalmente por el hecho 
 
 ### Actividad 8:  
 
+__Lo que hizo mi compañera diferente:__  
+- Organizó mejor los valores configurables:  
+Definió una variable moveStep para controlar cuánto se mueve el círculo con cada pulsación (moveStep = 10;). Eso hace que si luego se quiere cambiar la velocidad del movimiento, solo se necesita modificar ese valor en un lugar. Yo puse el 10 directamente dentro de los condicionales, lo que es menos limpio y reutilizable.  
+
+- Agregó una restricción de movimiento:  
+Incluyó una línea que evita que el círculo se salga del canvas:  
+```js
+circleX = constrain(circleX, 25, width - 25);
+```
+
+Esto me pareció muy útil. Yo no había pensado en poner límites al movimiento, así que si mantenía presionado un botón, el círculo podía irse fuera de la pantalla.  
+
+- Usó fill("pink") antes de dibujar el círculo:  
+Eso le da un color más visible o estilizado al círculo. Yo no cambié el color, así que siempre se muestra en el color predeterminado.
+
+___________________________________________________________  
+
+__Lo que yo hice:__  
+- Mi código también funciona, pero es más directo y con menos detalles visuales o de control. No usé una variable para el paso del movimiento, ni me aseguré de que el círculo se mantuviera dentro del lienzo. además, no incluí ningún color personalizado para el círculo, ni una lógica que hiciera más claro el estado de conexión visualmente (aunque sí hay diferente texto del botón). Es decir, resolví el problema básico, pero ella le dió una solución más estructurada y robusta.
+  
+___________________________________________________________  
+
+__Lo que aprendí de su solución:__  
+- Aprendí que es mejor separar los valores como el tamaño del paso en una variable (moveStep), porque facilita hacer cambios o experimentar con distintas velocidades.  
+- También entendí la importancia de restringir el movimiento con constrain() para mejorar la experiencia visual y evitar errores.  
+- Y que detalles como el color o la posición precisa del botón también hacen que el proyecto luzca más pulido.  
 
 
-
-
-
-
-
-
-
+  
