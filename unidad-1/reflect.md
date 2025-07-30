@@ -140,6 +140,24 @@ __Lo que aprendí de su solución:__
 - Aprendí que es mejor separar los valores como el tamaño del paso en una variable (moveStep), porque facilita hacer cambios o experimentar con distintas velocidades.  
 - También entendí la importancia de restringir el movimiento con constrain() para mejorar la experiencia visual y evitar errores.  
 - Y que detalles como el color o la posición precisa del botón también hacen que el proyecto luzca más pulido.  
+  
+___________________________________________________________  
 
+### Actividad 9:  
+
+__Continuar: ¿Qué actividad, video o ejemplo de esta unidad te resultó más inspirador o te ayudó más a entender el potencial de los sistemas físicos interactivos?__  
+R//El video del proyecto de los chicos de upb donde había una persona bailando con sensores y según el baile y la conción reproducida en ableton, se generaba un producto visual.  
+
+__Dejar de hacer: ¿Hubo alguna parte que te pareció demasiado abstracta, muy rápida o confusa? ¿Hay algo que crees que podríamos cambiar para que sea más claro?__  
+R//Por ahora no, todo bastante claro.  
+
+__Empezar a hacer: ¿Qué te genera más curiosidad ahora? ¿Te gustaría explorar más sensores del micro:bit (luz, temperatura), crear visualizaciones más complejas en p5.js o ver más ejemplos de proyectos artísticos?__  
+R//Por ahora lo que mas me ha llamado la atención es la parte del arte generativo.  
+
+__Balance inspiración vs. técnica: ¿Cómo sentiste el equilibrio entre ver los videos inspiradores de la Actividad 01 y la parte técnica de conectar las herramientas en las actividades 03-06?__  
+R//Bastante bien pero me hubiese gustado mas ver proyectos mas similares los que ibamos a trabajar en la uynidad 1.  
+
+__Comentario adicional: ¿Hay algo más que quieras compartir sobre tu experiencia en esta unidad introductoria?__  
+R//Fue un poco complejo hata cierto punto entender las conexione sy relaciones como input, proceso y outputs, pero todo muy claro luego de practicar.  
 
   
