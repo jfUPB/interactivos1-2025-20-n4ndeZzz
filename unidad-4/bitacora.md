@@ -1,189 +1,273 @@
-
 # Evidencias de la unidad 4
 
 ## Código
 
-[Enlace a la aplicación a modificar](URL)
+[[Enlace a la aplicación a modificar](URL)](http://www.generative-gestaltung.de/2/sketches/?02_M/M_1_2_01)
 
 Código a modificar:
 
 ``` js
 
+// M_1_2_01
+//
+// Generative Gestaltung – Creative Coding im Web
+// ISBN: 978-3-87439-902-9, First Edition, Hermann Schmidt, Mainz, 2018
+// Benedikt Groß, Hartmut Bohnacker, Julia Laub, Claudius Lazzeroni
+// with contributions by Joey Lee and Niels Poldervaart
+// Copyright 2018
+//
+// http://www.generative-gestaltung.de
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * order vs random!
+ * how to interpolate beetween a free composition (random) and a circle shape (order)
+ *
+ * MOUSE
+ * position x          : fade between random and circle shape
+ *
+ * KEYS
+ * s                   : save png
+ */
+'use strict';
+
+var sketch = function(p) {
+
+  var actRandomSeed = 0;
+  var count = 150;
+
+  p.setup = function() {
+    p.createCanvas(800,800);
+    p.cursor(p.CROSS);
+    p.noStroke();
+    p.fill(0,130,164);
+  };
+
+  p.draw = function() {
+    p.background(255);
+
+    var faderX = p.mouseX / p.width;
+
+    p.randomSeed(actRandomSeed);
+    var angle = p.radians(360 / count);
+    for (var i = 0; i < count; i++) {
+      // positions
+      var randomX = p.random(0,p.width);
+      var randomY = p.random(0,p.height);
+      var circleX = p.width / 2 + p.cos(angle * i) * 300;
+      var circleY = p.height / 2 + p.sin(angle * i) * 300;
+
+      var x = p.lerp(randomX,circleX,faderX);
+      var y = p.lerp(randomY,circleY,faderX);
+
+      p.ellipse(x,y,11,11);
+    };
+  };
+
+  p.mousePressed = function() {
+    actRandomSeed = p.random(100000);
+  };
+
+  p.keyReleased = function(){
+    if (p.key == 's' || p.key == 'S') p.saveCanvas(gd.timestamp(), 'png');
+  };
+
+};
+
+var myp5 = new p5(sketch);
+
+
 ```
 
-[Enlace a la aplicación modificada](URL)
+[Enlace a la aplicación modificada](URL) https://editor.p5js.org/SANTISDVSF/sketches/T87WalDHh
 
 Código modificado:
 
 ``` js
 
-```
+/****************************************************
+ * M_1_2_01 (orden vs random) + micro:bit (p5.webserial)
+ * Sensores (4/4):
+ *   - xValue  -> fader random ↔ círculo
+ *   - yValue  -> tamaño de los puntos (ellipse)
+ *   - button A (press)    -> nueva semilla (como mousePressed original)
+ *   - button B (release)  -> cambiar color
+ * SIN simulación: requiere micro:bit real
+ ****************************************************/
 
-## Video
+// ------- Serial + estados -------
+let port, connectBtn, connectionInitialized = false, microBitConnected = false;
 
-[Video demostratativo](URL)
+const STATES = {
+  WAIT_MICROBIT_CONNECTION: "WAIT_MICROBIT_CONNECTION",
+  RUNNING: "RUNNING",
+};
+let appState = STATES.WAIT_MICROBIT_CONNECTION;
 
+// Sensores
+let microBitX = 0, microBitY = 0;
+let microBitA = false, microBitB = false;
+let prevA = false, prevB = false;
 
-Esta entrega se realizó fuera de plazo
-
-# Unidad 4
-
-
-## 🛠 Fase: Apply
-
-### Código original [aquí](https://editor.p5js.org/generative-design/sketches/P_2_1_2_01):
-
-```js
-'use strict';
-
-var tileCount = 20;
-var actRandomSeed = 0;
-
-var circleAlpha = 130;
-var circleColor;
-
-function setup() {
-  createCanvas(600, 600);
-  noFill();
-  circleColor = color(0, 0, 0, circleAlpha);
-}
-
-function draw() {
-  translate(width / tileCount / 2, height / tileCount / 2);
-
-  background(255);
-
-  randomSeed(actRandomSeed);
-
-  stroke(circleColor);
-  strokeWeight(mouseY / 60);
-
-  for (var gridY = 0; gridY < tileCount; gridY++) {
-    for (var gridX = 0; gridX < tileCount; gridX++) {
-
-      var posX = width / tileCount * gridX;
-      var posY = height / tileCount * gridY;
-
-      var shiftX = random(-mouseX, mouseX) / 20;
-      var shiftY = random(-mouseX, mouseX) / 20;
-
-      ellipse(posX + shiftX, posY + shiftY, mouseY / 15, mouseY / 15);
-    }
-  }
-}
-
-function mousePressed() {
-  actRandomSeed = random(100000);
-}
-
-function keyReleased() {
-  if (key == 's' || key == 'S') saveCanvas(gd.timestamp(), 'png');
-}
-```
-
-### Código modificado [aquí](https://editor.p5js.org/n4ndeZzz/sketches/jkiQ-vJ2y):
-```js
-'use strict';
-
-// --- Variables del sketch generativo ---
-let tileCount = 20;
+// ------- Parámetros del sketch original -------
 let actRandomSeed = 0;
-let circleAlpha = 130;
-let circleColor;
+let count = 150;
+let dotColor;
 
-// --- Variables para la comunicación con Micro:bit ---
-let port;
-let microBitX = 0;
-let microBitY = 0;
-let microBitAState = false;
-let microBitBState = false;
-let prevAState = false;
-let prevBState = false;
-
-function setup() {
-  createCanvas(600, 600);
-  noFill();
-  circleColor = color(0, 0, 0, circleAlpha);
-
-  // Botón y configuración para conectar al Micro:bit
-  port = createSerial();
-  let connectButton = createButton("Conectar micro:bit");
-  connectButton.mousePressed(connectToMicroBit);
+// Util: -1024..1024 -> 0..1
+function tilt01(v) {
+  return constrain(map(v, -1024, 1024, 0, 1), 0, 1);
 }
 
-function connectToMicroBit() {
-  if (!port.opened()) {
-    port.open("MicroPython", 115200);
-  } else {
-    port.close();
+function setup() {
+  // Igual que el original (800x800)
+  createCanvas(800, 800);
+  cursor(CROSS);
+  noStroke();
+  dotColor = color(0, 130, 164); // color inicial del ejemplo
+
+  // WebSerial
+  port = createSerial();
+  connectBtn = createButton("Connect to micro:bit");
+  connectBtn.position(12, 12);
+  connectBtn.mousePressed(() => {
+    if (!port.opened()) {
+      port.open("MicroPython", 115200);
+      connectionInitialized = false;
+    } else {
+      port.close();
+    }
+  });
+}
+
+function updateEdges(newA, newB) {
+  // A PRESSED -> nueva semilla (equivale a click en el original)
+  if (newA && !prevA) {
+    actRandomSeed = random(100000);
   }
+  // B RELEASED -> cambiar color
+  if (!newB && prevB) {
+    dotColor = color(random(255), random(255), random(255));
+  }
+  prevA = newA;
+  prevB = newB;
 }
 
 function draw() {
-  // --- Lectura de datos del Micro:bit ---
-  if (port.opened() && port.availableBytes() > 0) {
-    let datosSeriales = port.readUntil("\n");
-    if (datosSeriales) {
-      let values = datosSeriales.trim().split(",");
-      if (values.length === 4) {
-        // Asignamos los valores del acelerómetro
-        microBitX = int(values[0]);
-        microBitY = int(values[1]);
-        // Asignamos el estado de los botones
-        microBitAState = (values[2] === "True");
-        microBitBState = (values[3] === "True");
+  // ----- gestión de puerto -----
+  if (!port.opened()) {
+    connectBtn.html("Connect to micro:bit");
+    microBitConnected = false;
+  } else {
+    connectBtn.html("Disconnect");
+    microBitConnected = true;
+
+    if (!connectionInitialized) {
+      port.clear();
+      connectionInitialized = true;
+    }
+    if (port.availableBytes() > 0) {
+      let line = port.readUntil("\n");
+      if (line) {
+        const vals = line.trim().split(",");
+        if (vals.length === 4) {
+          microBitX = int(vals[0]);
+          microBitY = int(vals[1]);
+          microBitA = vals[2].toLowerCase() === "true";
+          microBitB = vals[3].toLowerCase() === "true";
+          updateEdges(microBitA, microBitB);
+        }
       }
     }
   }
 
-  // --- Lógica de dibujo del sketch generativo ---
-  translate(width / tileCount / 2, height / tileCount / 2);
-  background(255);
-  
-  // Usamos una semilla para que el patrón sea estático hasta presionar el Botón A
-  randomSeed(actRandomSeed);
+  // ----- máquina de estados -----
+  switch (appState) {
+    case STATES.WAIT_MICROBIT_CONNECTION:
+      if (microBitConnected) {
+        background(255);
+        appState = STATES.RUNNING;
+      } else {
+        // pantalla de espera
+        background(20);
+        fill(240);
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(16);
+        text("Conecta el micro:bit y pulsa el botón", width/2, height/2);
+      }
+      break;
 
-  stroke(circleColor);
-  // Reemplazamos mouseY por el valor absoluto de microBitY
-  strokeWeight(max(1, abs(microBitY) / 60));
+    case STATES.RUNNING:
+      if (!microBitConnected) {
+        appState = STATES.WAIT_MICROBIT_CONNECTION;
+        break;
+      }
 
-  for (let gridY = 0; gridY < tileCount; gridY++) {
-    for (let gridX = 0; gridX < tileCount; gridX++) {
-      let posX = width / tileCount * gridX;
-      let posY = height / tileCount * gridY;
+      // --------- Dibujo (igual al original, con fader desde micro:bit) ---------
+      background(255);
 
-      // Reemplazamos mouseX por microBitX para el desplazamiento
-      let shiftX = random(-microBitX, microBitX) / 20;
-      let shiftY = random(-microBitX, microBitX) / 20;
+      // faderX: antes mouseX/width; ahora microBitX
+      const faderX = tilt01(microBitX); // 0..1
 
-      // Reemplazamos mouseY por el valor absoluto de microBitY para el tamaño
-      let circleSize = max(5, abs(microBitY) / 15);
-      ellipse(posX + shiftX, posY + shiftY, circleSize, circleSize);
-    }
+      // tamaño de punto desde yValue (-1024..1024) -> 5..25 px
+      const dotSizeBase = map(microBitY, -1024, 1024, 5, 25);
+      const dotSize = constrain(dotSizeBase, 3, 30); // por si acaso
+
+      randomSeed(actRandomSeed);
+      const angle = radians(360 / count);
+      fill(dotColor);
+
+      for (let i = 0; i < count; i++) {
+        // posiciones aleatorias
+        const randomX = random(0, width);
+        const randomY = random(0, height);
+        // posiciones en círculo
+        const circleX = width / 2 + cos(angle * i) * 300;
+        const circleY = height / 2 + sin(angle * i) * 300;
+        // interpolación
+        const x = lerp(randomX, circleX, faderX);
+        const y = lerp(randomY, circleY, faderX);
+        ellipse(x, y, dotSize, dotSize);
+      }
+      break;
   }
-
-  // --- Lógica de los botones del Micro:bit ---
-  // Si se presiona el Botón A, genera una nueva semilla (nuevo patrón)
-  if (microBitAState && !prevAState) {
-    actRandomSeed = random(100000);
-  }
-
-  // Si se presiona el Botón B, guarda el canvas como PNG
-  if (microBitBState && !prevBState) {
-    saveCanvas('microbit_pattern', 'png');
-  }
-
-  // Actualizamos el estado previo de los botones
-  prevAState = microBitAState;
-  prevBState = microBitBState;
 }
 
-// También puedes conservar la opción de guardar con el teclado
+// ----- teclas: como el original -----
 function keyReleased() {
-  if (key == 's' || key == 'S') saveCanvas('keyboard_pattern', 'png');
+  if (key === 's' || key === 'S') {
+    const ts = year() + nf(month(), 2) + nf(day(), 2) + "_" + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2);
+    saveCanvas(ts, 'png');
+  }
 }
+
+function windowResized() {
+  // Si usas 800x800 fijo, no hace falta redimensionar.
+  // Si cambias a pantalla completa, usa:
+  // resizeCanvas(windowWidth, windowHeight);
+}
+
+
+
 ```
 
+## Video
+
+[Video demostratativo][ https://youtu.be/xqK1A7_DlEw](https://youtu.be/N9Z4aeJUogo)
 
 
-https://github.com/user-attachments/assets/fb72bf6d-1f6b-4e75-bd14-4e6121438d2f
+
+
+
+
+
+

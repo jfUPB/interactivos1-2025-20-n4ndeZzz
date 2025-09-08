@@ -1,24 +1,23 @@
 # Unidad 3
 
-## 🔎 Fase: Set + Seek
+## 🔎 Fase: Set + Seek  
 
-### Actividad 5:  
+### Actividad 05  
+<img width="891" height="482" alt="image" src="https://github.com/user-attachments/assets/304107da-6d87-42ac-91c0-65e939006f2b" />
+
+<img width="743" height="579" alt="image" src="https://github.com/user-attachments/assets/8474d412-2a3b-4f59-a30d-68c52fcff564" />
 
 
-## Tabla de vectores de prueba
 
-| Estado inicial | Evento disparador      | Acciones                                                   | Estado final |
-|----------------|------------------------|------------------------------------------------------------|--------------|
-| CONFIG         | A                      | `count = min(count+1,60)` → mostrar en display             | CONFIG       |
-| CONFIG         | B                      | `count = max(10,count-1)` → mostrar en display             | CONFIG       |
-| CONFIG         | S                      | `startTime = ticks_ms()` → pasar a cuenta regresiva        | ARMED        |
-| CONFIG         | Ninguno                | Mostrar count en display                                   | CONFIG       |
-| ARMED          | 1 seg transcurrido     | `count--`, mostrar en display, si `count==0` → SKULL       | ARMED/EXPLODED |
-| ARMED          | A                      | Agregar 'A' al buffer de clave                            | ARMED        |
-| ARMED          | B                      | Agregar 'B' al buffer de clave                            | ARMED        |
-| ARMED          | Clave correcta (A,B,A) | Reset `count=20`, mostrar en display, volver a CONFIG      | CONFIG       |
-| ARMED          | Clave incorrecta       | Reset `keyindex=0`                                         | ARMED        |
-| EXPLODED       | T                      | Reset `count=20`, mostrar en display, `state=CONFIG`       | CONFIG       |
-| EXPLODED       | A/B/S                  | Ignorado                                                   | EXPLODED     |
 
----
+
+
+
+
+
+<img width="1112" height="735" alt="image" src="https://github.com/user-attachments/assets/a7bedbcb-506b-41c7-98ad-c7e3026c80fa" />
+
+<img width="833" height="509" alt="image" src="https://github.com/user-attachments/assets/9b5e7e95-a8ba-4c04-b551-94e6f4cc6c9b" />
+
+
+

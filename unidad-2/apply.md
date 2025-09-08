@@ -3,150 +3,127 @@
 
 ## 🛠 Fase: Apply
 
-### Actividad 4:  
-<img width="540" height="272" alt="image" src="https://github.com/user-attachments/assets/8711c931-4007-4848-98fc-b79a98c75d73" />
+### Actividad 4
+<img width="750" height="746" alt="image" src="https://github.com/user-attachments/assets/1b6cd2aa-d1be-422b-8cec-1682df134b37" />
 
-_____________________________________________________________________
-
-### Actividad 5:  
-
-__1) El código que implementa la bomba temporizada.__  
-
-```py
-
+### Actividad 5
+```js
 from microbit import *
+import music
 import utime
+
+TIME_MIN = 10
+TIME_MAX = 60
+TIME_INIT = 20
+INTERVAL = 1000  # 1 segundo en milisegundos
 
 STATE_CONFIG = 0
 STATE_ARMED = 1
-STATE_EXPLOSION = 2
+STATE_EXPLODED = 2
 
-time_set = 20   # Tiempo inicial en segundos
-min_time = 10
-max_time = 60
+state = STATE_CONFIG
+time_set = TIME_INIT
+time_left = TIME_INIT
+start_time = utime.ticks_ms()
 
-current_state = STATE_CONFIG
-start_time = 0
-remaining_time = time_set
+def show_time(t):
+    display.show(str(t).rjust(2))  # siempre 2 dígitos
+
 
 while True:
-    if current_state == STATE_CONFIG:
-        display.show(str(time_set))
-        
-        if button_a.was_pressed():
-            if time_set < max_time:
-                time_set += 1
-        
-        if button_b.was_pressed():
-            if time_set > min_time:
-                time_set -= 1
-        
-        if accelerometer.was_gesture("shake"):
-            current_state = STATE_ARMED
-            remaining_time = time_set
+    # Estado CONFIG
+    if state == STATE_CONFIG:
+        if button_a.was_pressed() and time_set < TIME_MAX:
+            time_set += 1
+            show_time(time_set)
+        elif button_b.was_pressed() and time_set > TIME_MIN:
+            time_set -= 1
+            show_time(time_set)
+        elif accelerometer.was_gesture("shake"):
+            time_left = time_set
             start_time = utime.ticks_ms()
-    
-    elif current_state == STATE_ARMED:
-        display.show(str(remaining_time))
+            state = STATE_ARMED
+            show_time(time_left)
+
+
+    elif state == STATE_ARMED:
+        current_time = utime.ticks_ms()
+        if utime.ticks_diff(current_time, start_time) >= INTERVAL:
+            time_left -= 1
+            start_time = current_time
+            show_time(time_left)
         
-        if utime.ticks_diff(utime.ticks_ms(), start_time) >= 1000:
-            remaining_time -= 1
-            start_time = utime.ticks_ms()
-        
-        if remaining_time <= 0:
-            current_state = STATE_EXPLOSION
-        
+
         if pin_logo.is_touched():
-            current_state = STATE_CONFIG
-    
-    elif current_state == STATE_EXPLOSION:
-        for i in range(5):
+            state = STATE_CONFIG
+            time_set = TIME_INIT
+            show_time(time_set)
+
+
+        if time_left <= 0:
+            state = STATE_EXPLODED
             display.show(Image.SKULL)
-            utime.sleep_ms(200)
-            display.clear()
-            utime.sleep_ms(200)
-        
+            music.play(music.WAWAWAWAA)
+
+
+    elif state == STATE_EXPLODED:
+        # Reinicio por toque
         if pin_logo.is_touched():
-            current_state = STATE_CONFIG
+            state = STATE_CONFIG
+            time_set = TIME_INIT
+            show_time(time_set)
 ```
+**Vector de Prueba 1**  
+Condiciones iniciales: state = STATE_CONFIG, time_set = 20 s. El botón A es presionado 5 veces antes de agitar el micro:bit.  
+Evento: button_a.was_pressed() == True (5 veces) seguido de accelerometer.was_gesture('shake') == True.  
 
-__2) La definición de los vectores de prueba básicos que permiten verificar el correcto funcionamiento del programa.__  
+**Resultado esperado:**  
+**Imagen:** Image.ARROW_N en cada incremento.  
+**Estado nuevo:** STATE_ARMED.  
+Tiempo configurado (time_set) = 25 s.  
+Comienza la cuenta regresiva desde 25 s y, al llegar a 0, muestra Image.SKULL, reproduce music.WAWAWAWAA, vuelve a STATE_CONFIG con time_set = 20 s.    
+**Resultado obtenido:** El sistema incrementa el tiempo, muestra flechas hacia arriba, cuenta desde 25 s, detona y reinicia correctamente.  
 
-__Vector de prueba 1 — Configuración del tiempo (UP/DOWN)__  
-*Condiciones iniciales*  
-- Estado: CONFIGURACIÓN  
-- Tiempo configurado: 20 segundos.  
+**Vector de Prueba 2**  
+Condiciones iniciales: state = STATE_CONFIG, time_set = 20 s. El botón B es presionado 5 veces antes de agitar el micro:bit.  
+Evento: button_b.was_pressed() == True (5 veces) seguido de accelerometer.was_gesture('shake') == True, luego pin_logo.is_touched() == True antes de llegar a 0.  
 
-*Eventos*  
-- Presionar botón A (UP) tres veces.  
-- Presionar botón B (DOWN) dos veces.  
+**Resultado esperado:**
+**Imagen:** Image.ARROW_S en cada decremento.  
+Estado nuevo después de agitar: STATE_ARMED.  
+Tiempo configurado (time_set) = 15 s.  
+Se desarma al tocar el logo, vuelve a STATE_CONFIG con time_set = 20 s, sin sonido ni imagen de explosión.  
+**Resultado obtenido:** El sistema reduce el tiempo a 15 s, pasa a STATE_ARMED, se desarma al tocar el logo y vuelve a configuración con el tiempo reiniciado.  
 
-*Resultado esperado*  
-- Después de las 3 presiones en UP: tiempo = 23 segundos.  
-- Después de las 2 presiones en DOWN: tiempo = 21 segundos.  
-- El valor se mantiene en pantalla.  
+**Vector de Prueba 3**  
+**Condiciones iniciales:** state = STATE_CONFIG, time_set = 20 s.  
+**Evento:** Se presiona button_a.was_pressed() == True repetidamente hasta intentar superar 60 s y luego button_b.was_pressed() == True repetidamente hasta intentar bajar de 10 s, después accelerometer.was_gesture('shake') == True.  
+**Resultado esperado:**  
+**Imagen:** Image.ARROW_N al incrementar y Image.ARROW_S al decrementar.  
+Límite superior: 60 s.  
+Límite inferior: 10 s.  
+Estado nuevo después de agitar: STATE_ARMED con el último tiempo válido.  
+Al llegar a 0: Image.SKULL, sonido music.WAWAWAWAA, vuelve a STATE_CONFIG con time_set = 20 s.  
+**Resultado obtenido:** El sistema respeta los límites, arma la bomba y detona con el tiempo configurado, reiniciando correctamente.  
 
+**Vector de Prueba 4**  
+**Condiciones iniciales:** state = STATE_ARMED, time_left = 5 s.  
+**Evento:** Esperar a que el contador llegue a 0 sin presionar nada, luego tocar el logo (pin_logo.is_touched() == True).  
+**Resultado esperado:**  
+Al llegar a 0: muestra Image.SKULL, reproduce music.WAWAWAWAA.  
+No vuelve a STATE_CONFIG automáticamente, permanece en STATE_EXPLODED.  
+Tras tocar el logo, vuelve a STATE_CONFIG y time_set = 20 s.  
+**Resultado obtenido:** El sistema detona, muestra calavera y sonido, permanece en STATE_EXPLODED hasta que se toca el logo, luego vuelve a configuración con el tiempo reiniciado.  
 
-__Vector de prueba 2 — Límite mínimo y máximo del tiempo__   
-*Condiciones iniciales*  
-- Estado: CONFIGURACIÓN.  
-
-*Eventos*  
-- Colocar el tiempo en 60 segundos y presionar UP una vez más.  
-- Colocar el tiempo en 10 segundos y presionar DOWN una vez más.  
-
-*Resultado esperado*  
-- En el caso 1: el tiempo sigue siendo 60 (no aumenta).  
-- En el caso 2: el tiempo sigue siendo 10 (no disminuye).  
-
-
-__Vector de prueba 3 — Armado de la bomba__   
-*Condiciones iniciales*  
-- Estado: CONFIGURACIÓN.  
-- Tiempo configurado: 15 segundos.  
-
-*Eventos*  
-- Agitar el micro:bit (gesto shake).  
-
-*Resultado esperado*  
-- Estado cambia a ARMADA.  
-- Pantalla muestra 15 y empieza a decrementar cada segundo.  
-
-
-__Vector de prueba 4 — Cuenta regresiva completa__  
-*Condiciones iniciales*  
-- Estado: ARMADA.  
-- Tiempo restante: 5 segundos.  
-
-*Eventos*  
-- Dejar correr el tiempo hasta llegar a 0.  
-
-*Resultado esperado*  
-- Cuando llega a 0, estado pasa a EXPLOSIÓN.  
-- Pantalla parpadea con icono de calavera (Image.SKULL) durante 5 ciclos.  
-
-
-__Vector de prueba 5 — Reinicio desde EXPLOSIÓN__  
-*Condiciones iniciales*  
-- Estado: EXPLOSIÓN.  
-
-*Eventos*  
-- Tocar el logo táctil (pin_logo.is_touched()).  
-
-*Resultado esperado*  
-- Estado vuelve a CONFIGURACIÓN.  
-- Tiempo mostrado en pantalla es el configurado antes de armar la bomba.  
-
-
-__Vector de prueba 6 — Cancelación en medio de la cuenta regresiva__  
-*Condiciones iniciales*  
-- Estado: ARMADA.  
-- Tiempo restante: 12 segundos.  
-
-*Eventos*  
-- Tocar el logo táctil antes de que el tiempo llegue a 0.  
-
-*Resultado esperado*  
-- Estado vuelve a CONFIGURACIÓN.  
+**Vector de Prueba 5**
+**Condiciones iniciales:** state = STATE_CONFIG, time_set = 20 s.  
+**Evento:** Presionar button_a.was_pressed() hasta llegar exactamente a 60 s.  
+Agitar (accelerometer.was_gesture('shake') == True).  
+**Resultado esperado:** No permite pasar de 60 s, aunque se presione más veces el botón A.  
+**Estado nuevo:** STATE_ARMED con time_left = 60 s.  
+Cuenta regresiva correcta desde 60 s hasta 0.  
+Al llegar a 0: calavera, sonido y reinicio con 20 s.  
+**Resultado obtenido:** El sistema respeta el límite máximo, inicia con 60 s, detona y reinicia correctamente.  
+ 
 
 
