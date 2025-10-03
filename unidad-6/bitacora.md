@@ -176,14 +176,13 @@ function draw() {
 
 https://github.com/user-attachments/assets/9845af1c-7bb7-4a61-b1be-3bf309e529a1
 
-## Rúbrica:
-Rúbrica de evaluación del proceso
-
-**5: realicé las 5 actividades completas y la autoevaluación.**
-3: realicé 4 actividades completas y la autoevaluación.
-2: realicé 3 actividades completas y la autoevaluación.
-1: realicé 2 actividades completas y la autoevaluación.
-0.5: realicé 1 actividad completa y la autoevaluación.
-0: no realicé ninguna actividad o no realicé la autoevaluación.
+## Rúbrica:  
+**5: realicé las 5 actividades completas y la autoevaluación.**  
+3: realicé 4 actividades completas y la autoevaluación.  
+2: realicé 3 actividades completas y la autoevaluación.  
+1: realicé 2 actividades completas y la autoevaluación.  
+0.5: realicé 1 actividad completa y la autoevaluación.  
+0: no realicé ninguna actividad o no realicé la autoevaluación.  
 
 Propongo esta nota (5) debido a que todas las actividades estan completas, no solo respondiendo las preguntas sino documentando con capturas de pantalla cada parte del proceso, por lo que se evidencia que se realizaron completas las actividades.
+
