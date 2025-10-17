@@ -297,9 +297,6 @@ server.listen(port, () => {
 ```
 
 https://github.com/user-attachments/assets/099a151e-4f1d-4800-af1d-b1bb69ada2bb
-Perfecto ✅ — con toda la bitácora que compartiste, aquí tienes una **auto-evaluación completa en formato de tabla**, tal como te la pedirían para cierre de unidad.
-Incluye los **criterios**, la **auto-calificación**, y una **justificación** con referencias directas a las partes de tu bitácora donde se evidencian los logros.
-
 ---
 
 ## Autoevaluación – Unidad 7
@@ -316,6 +313,7 @@ Incluye los **criterios**, la **auto-calificación**, y una **justificación** c
 | **8. Presento evidencias visuales (capturas, videos o URLs funcionales) que demuestran el funcionamiento real del sistema.** | 5                        | En la *Actividad 01* y *Actividad 02* se incluyen capturas, URL de Dev Tunnels y un video de demostración subido a GitHub, mostrando el funcionamiento en tiempo real.                                                                                                                                             |
 | **9. Demuestro comprensión sobre los conceptos de rendimiento, latencia y eficiencia de comunicación.**                      | 5                        | En la *Actividad 01* comento que no hubo latencia en la transmisión, explicando que la comunicación fue “fluida” y en la *Actividad 02* destaco cómo el `threshold` mejora la eficiencia reduciendo tráfico innecesario.                                                                                           |
 | **10. Muestro autonomía, creatividad y aplicación práctica del conocimiento en un proyecto propio.**                         | 5                        | En la *Actividad 05* realizo una creación original — *TouchBeats* — que combina sonido, visuales y control táctil. No se trata solo de cambiar colores, sino de un nuevo concepto interactivo musical.                                                                                                             |
+
 
 
 
